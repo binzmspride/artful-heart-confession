@@ -28,6 +28,13 @@ export default {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
 				},
+				love: {
+					red: '#ea384c',
+					pink: '#FFDEE2',
+					peach: '#FDE1D3',
+					purple: '#9b87f5',
+					magenta: '#D946EF',
+				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
