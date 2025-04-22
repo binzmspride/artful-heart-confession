@@ -42,17 +42,19 @@ export const Canvas = () => {
       backgroundColor: "#ffffff",
     });
     
-    // Khởi tạo brush
-    canvas.freeDrawingBrush.color = activeColor;
-    canvas.freeDrawingBrush.width = brushSize;
+    // Make sure to initialize the brush AFTER canvas creation
+    if (canvas.freeDrawingBrush) {
+      canvas.freeDrawingBrush.color = activeColor;
+      canvas.freeDrawingBrush.width = brushSize;
+    }
     
     // Lưu trạng thái ban đầu
     const initialState = JSON.stringify(canvas.toJSON());
     historyRef.current.current = initialState;
     
     // Bắt sự kiện object:modified và path:created để lưu vào lịch sử
-      canvas.on("object:modified", () => saveToHistory(canvas));
-      canvas.on("path:created", () => saveToHistory(canvas));
+    canvas.on("object:modified", () => saveToHistory(canvas));
+    canvas.on("path:created", () => saveToHistory(canvas));
     
     setFabricCanvas(canvas);
     
@@ -68,7 +70,7 @@ export const Canvas = () => {
       canvas.dispose();
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [activeColor, brushSize]);
   
   // Lưu trạng thái vào lịch sử
   const saveToHistory = (canvas: FabricCanvas) => {
@@ -89,12 +91,15 @@ export const Canvas = () => {
     
     fabricCanvas.isDrawingMode = activeTool === "draw" || activeTool === "eraser";
     
-    if (activeTool === "draw") {
-      fabricCanvas.freeDrawingBrush.color = activeColor;
-      fabricCanvas.freeDrawingBrush.width = brushSize;
-    } else if (activeTool === "eraser") {
-      fabricCanvas.freeDrawingBrush.color = "#ffffff";
-      fabricCanvas.freeDrawingBrush.width = brushSize * 2;
+    // Always check that freeDrawingBrush exists before accessing its properties
+    if (fabricCanvas.freeDrawingBrush) {
+      if (activeTool === "draw") {
+        fabricCanvas.freeDrawingBrush.color = activeColor;
+        fabricCanvas.freeDrawingBrush.width = brushSize;
+      } else if (activeTool === "eraser") {
+        fabricCanvas.freeDrawingBrush.color = "#ffffff";
+        fabricCanvas.freeDrawingBrush.width = brushSize * 2;
+      }
     }
     
     // Nếu chọn công cụ text, mở dialog thêm chữ
