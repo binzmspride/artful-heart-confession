@@ -3,8 +3,22 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Update these values with your local PostgreSQL connection details
-const SUPABASE_URL = "http://localhost:54321/rest/v1/?db=loveheart_db";  // Added database name to URL
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0";
+// Supabase URL và key cho môi trường production hoặc local
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "http://localhost:54321/rest/v1/?db=loveheart_db";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+// Tạo Supabase client với cấu hình database loveheart_db
+export const supabase = createClient<Database>(
+  SUPABASE_URL, 
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    db: {
+      schema: 'public'
+    },
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
+    }
+  }
+);
