@@ -1,15 +1,28 @@
 
 import { Canvas } from "@/components/Canvas";
 import { HeartEffect } from "@/components/HeartEffect";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
     <div className="min-h-screen heart-bg">
-      {/* Hiệu ứng trái tim bay */}
       <HeartEffect />
       
       <div className="love-container">
-        <header className="mb-8 text-center">
+        <header className="mb-8 text-center relative">
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="absolute right-0 top-0"
+          >
+            Đăng xuất
+          </Button>
+          
           <h1 className="text-5xl font-bold text-love-red mb-3 love-shadow floating">
             Vẽ Trái Tim Tỏ Tình
           </h1>
