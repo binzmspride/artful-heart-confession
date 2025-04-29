@@ -13,7 +13,7 @@ export const supabase = createClient<Database>(
   SUPABASE_PUBLISHABLE_KEY,
   {
     db: {
-      schema: 'loveheart'
+      schema: 'public'
     },
     auth: {
       autoRefreshToken: true,
@@ -22,3 +22,6 @@ export const supabase = createClient<Database>(
     }
   }
 );
+
+// Lưu ý: Chúng ta đã tạo schema loveheart trong database, nhưng client vẫn cần sử dụng 'public'
+// cho cấu hình TypeScript. Các truy vấn SQL có thể chỉ định schema 'loveheart' khi cần.
